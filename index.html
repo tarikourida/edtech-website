@@ -3,83 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Responsive Educational Platform</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #e9ecef;
-        }
-        header {
-            background-color: #007bff;
-            padding: 20px;
-            color: white;
-            text-align: center;
-        }
-        nav {
-            text-align: center;
-            background-color: #343a40;
-            padding: 10px 0;
-        }
-        nav a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-        }
-        nav a:hover {
-            color: #007bff;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-        }
-        .course-box {
-            background-color: white;
-            padding: 20px;
-            margin: 10px;
-            border-radius: 8px;
-            flex-basis: 45%;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .course-box h3 {
-            color: #007bff;
-        }
-        @media (max-width: 768px) {
-            .course-box {
-                flex-basis: 100%;
-            }
-        }
-    </style>
+    <title>Python OpenAI API Example</title>
 </head>
 <body>
+    <h1>Ask OpenAI</h1>
+    <textarea id="userInput" rows="4" cols="50" placeholder="Type your question here..."></textarea>
+    <br><br>
+    <button id="submitBtn">Submit</button>
+    <p id="response"></p>
 
-<header>
-    <h1>Responsive Educational Platform</h1>
-</header>
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            const userInput = document.getElementById('userInput').value;
 
-<nav>
-    <a href="#home">Home</a>
-    <a href="#courses">Courses</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-</nav>
-
-<div class="container">
-    <div class="course-box">
-        <h3>History Course</h3>
-        <p>Explore the ancient civilizations and the modern world through engaging lessons and interactive activities.</p>
-    </div>
-    <div class="course-box">
-        <h3>Chemistry Basics</h3>
-        <p>Learn the building blocks of matter, chemical reactions, and much more in this fundamental course.</p>
-    </div>
-</div>
-
+            fetch('/api/openai', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ user_input: userInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Assuming OpenAI API returns 'choices' in the response
+                document.getElementById('response').textContent = data.choices[0].message.content;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
 </body>
 </html>
